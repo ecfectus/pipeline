@@ -40,3 +40,20 @@ $pipeline->push(function($arg, callable $next){
 $result = $pipeline(0);//$result = 0
 $pipeline->finished();// == false as pipe 2 returned a result, not $next();
 ```
+
+By design passed pipes MUST be `callable` and they are invoked in sequence.
+However that's not set in stone, you could if needed set your own resolver to resolve each pipe, perfect when using ioc containers, or to provide app specific syntax like `Class@method`.
+
+```php
+$pipeline new Ecfectus\Pipeline\Pipeline();
+$pipeline->setResolver(function($pipe){
+    if(is_string($pipe)){
+        //parse string, or fetch from ioc container
+        $pipe = $someContainer->get($pipe);
+    }
+    if(is_callable($pipe)){
+        return $pipe;
+    }
+    throw new InvalidArgumentException('Whoah, we could find that pipe!');
+});
+```
