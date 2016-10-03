@@ -4,7 +4,7 @@
 
 A Simple PHP 7 Pipeline class.
 
-The ecfectus pipeline is an opinionated sequential runner which takes pipes, and runs the given value(s) through each one, returning the end result.
+The ecfectus pipeline is an un-opinionated sequential runner which takes pipes, and runs the given value(s) through each one, returning the end result.
 
 Unlike other pipelines which are strict on number of arguments, the ecfectus pipeline will accept and return whatever you give to it.
 
