@@ -48,11 +48,12 @@ class Pipeline implements PipelineInterface{
      */
     public function __invoke(...$arguments)
     {
-        if($this->finished()){
+        $resolvable = array_shift($this->pipeline);
+        if(!$resolvable){
             return (count($arguments) == 1) ? $arguments[0] : $arguments;
         }
         $resolver = $this->resolver;
-        $pipe = $resolver(array_shift($this->pipeline));
+        $pipe = $resolver($resolvable);
         $arguments[] = $this;
         return $pipe(...$arguments);
     }
