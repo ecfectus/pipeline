@@ -52,8 +52,7 @@ class Pipeline implements PipelineInterface{
         if(!$resolvable){
             return (count($arguments) == 1) ? $arguments[0] : $arguments;
         }
-        $resolver = $this->resolver;
-        $pipe = $resolver($resolvable);
+        $pipe = ($this->resolver)($resolvable);
         $arguments[] = $this;
         return $pipe(...$arguments);
     }
