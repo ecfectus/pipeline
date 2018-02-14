@@ -1,8 +1,6 @@
 <?php
 namespace Ecfectus\Pipeline;
 
-use Ds\Queue;
-
 class Pipeline implements PipelineInterface{
 
     /**
@@ -20,7 +18,7 @@ class Pipeline implements PipelineInterface{
      */
     public function __construct(array $pipes = []){
 
-        $this->pipeline = new Queue($pipes);
+        $this->pipeline = $pipes;
 
         $this->resolver = function(callable $pipe){
             return $pipe;
@@ -41,7 +39,7 @@ class Pipeline implements PipelineInterface{
      */
     public function push($pipe = null) : PipelineInterface
     {
-        $this->pipeline->push($pipe);
+        $this->pipeline[] = $pipe;
         return $this;
     }
 
@@ -54,7 +52,7 @@ class Pipeline implements PipelineInterface{
             return (count($arguments) == 1) ? $arguments[0] : $arguments;
         }
         $resolver = $this->resolver;
-        $pipe = $resolver($this->pipeline->pop());
+        $pipe = $resolver(array_shift($this->pipeline));
         $arguments[] = $this;
         return $pipe(...$arguments);
     }
@@ -64,7 +62,7 @@ class Pipeline implements PipelineInterface{
      */
     public function finished() : bool
     {
-        return $this->pipeline->isEmpty();
+        return empty($this->pipeline);
     }
 
 
